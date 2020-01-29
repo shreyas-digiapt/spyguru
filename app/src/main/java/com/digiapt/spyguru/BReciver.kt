@@ -16,6 +16,7 @@ class BReciver :BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         Log.d("sdad", "sads")
         showFlashMsg(context)
+
     }
 
     private fun showFlashMsg(context: Context) {

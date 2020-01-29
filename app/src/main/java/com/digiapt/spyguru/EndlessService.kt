@@ -7,14 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
-import android.graphics.PixelFormat
 import android.os.*
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.WindowManager
-import android.widget.Button
 import android.widget.Toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -121,12 +115,12 @@ class EndlessService : Service() {
         setServiceState(this, ServiceState.STARTED)
 
         // when phone sleeps
-        wakeLock =
-            (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
-                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "EndlessService::lock").apply {
-                    acquire()
-                }
-            }
+//        wakeLock =
+//            (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
+//                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "EndlessService::lock").apply {
+//                    acquire()
+//                }
+//            }
 
         // we are starting a loop in a coroutine
         GlobalScope.launch(Dispatchers.IO) {
@@ -135,7 +129,7 @@ class EndlessService : Service() {
                     pingFakeServer(intent)
                 }
                 //initating the service depending upon delay. It plays a major role
-                delay(500)
+                delay(1000)
             }
             log("End of the loop for the service")
         }
@@ -145,11 +139,11 @@ class EndlessService : Service() {
         log("Stopping the foreground service")
         Toast.makeText(this, "Service stopping", Toast.LENGTH_SHORT).show()
         try {
-            wakeLock?.let {
-                if (it.isHeld) {
-                    it.release()
-                }
-            }
+//            wakeLock?.let {
+//                if (it.isHeld) {
+//                    it.release()
+//                }
+//            }
             stopForeground(true)
             stopSelf()
         } catch (e: Exception) {
@@ -165,6 +159,11 @@ class EndlessService : Service() {
 
     private fun detials() {
         getForgroundPackage()
+        Log.d("test_999","name: "+Prefs.getAppValue(this))
+        Log.d("test_999","name: "+(Prefs.checkList(Prefs.getAppValue(this), Prefs.exceptions)))
+
+        Prefs.reset(this, Prefs.getAppValue(this))
+
 
         Log.d("tet55","sd: "+(Prefs.getAppValue(this).equals(Prefs.NULL) || Prefs.getAppValue(this).equals(Prefs.HOME) ||
                 Prefs.getAppValue(this).equals(Prefs.getNEWAppValueLive(this))
@@ -175,9 +174,14 @@ class EndlessService : Service() {
 
         Log.d("tet55", "pass: ")
         } else {
-            Log.d("tet55", "fail: ")
-            Prefs.setNEWAppValue(this, Prefs.getAppValue(this))
-            createBroascat()
+
+            if (!Prefs.checkList(Prefs.getAppValue(this), Prefs.exceptions)) {
+
+
+            }else {
+                Prefs.setNEWAppValue(this, Prefs.getAppValue(this))
+                createBroascat()
+            }
 
         }
 

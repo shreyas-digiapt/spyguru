@@ -1,6 +1,8 @@
 package com.digiapt.spyguru
 
 import android.content.Context
+import android.util.Log
+import kotlin.collections.ArrayList
 
 class Prefs {
     companion object {
@@ -33,6 +35,25 @@ class Prefs {
 
         fun getNEWAppValueLive(context: Context) : String {
             return context.getSharedPreferences(APPNAME, MODE).getString(APP_KEY_NEW, "null")!!
+        }
+
+
+            val exceptions = arrayListOf<String>("launcher", "android")
+
+        fun checkList(checking:String, array: ArrayList<String>): Boolean {
+            for (item in array) {
+                Log.d("test_999", "aasd: "+item+"   "+checking)
+                if (checking.contains(item)){
+                    return false
+                }
+            }
+            return true
+        }
+
+        fun reset(context: Context, condition:String) {
+            if (condition.contains(exceptions.get(0))) {
+                setNEWAppValue(context, "null")
+            }
         }
     }
 }
