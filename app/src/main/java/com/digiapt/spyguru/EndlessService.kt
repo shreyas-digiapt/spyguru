@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.os.*
 import android.util.Log
 import android.widget.Toast
+import androidx.work.WorkManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -164,7 +165,20 @@ class EndlessService : Service() {
 
         Prefs.reset(this, Prefs.getAppValue(this))
 
+        val phoneState = getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+        if (phoneState.isDeviceLocked) {
+            try {
+                WorkManager.getInstance(this).cancelAllWorkByTag("MYTASK")
+                Prefs.setNEWAppValue(this, "null")
+            }catch (e: java.lang.Exception) {
+                Log.d("work_123", "sda:  "+e.message)
+            }
+        }else {
+            startBroadcast()
+        }
+    }
 
+    private fun startBroadcast() {
         Log.d("tet55","sd: "+(Prefs.getAppValue(this).equals(Prefs.NULL) || Prefs.getAppValue(this).equals(Prefs.HOME) ||
                 Prefs.getAppValue(this).equals(Prefs.getNEWAppValueLive(this))
                 ))
@@ -172,11 +186,15 @@ class EndlessService : Service() {
             Prefs.getAppValue(this).equals(Prefs.getNEWAppValueLive(this))
         ) {
 
-        Log.d("tet55", "pass: ")
+            Log.d("tet55", "pass: ")
         } else {
 
             if (!Prefs.checkList(Prefs.getAppValue(this), Prefs.exceptions)) {
-
+                try {
+                    WorkManager.getInstance(this).cancelAllWorkByTag("MYTASK")
+                }catch (e:java.lang.Exception) {
+                    Log.d("work_123", "excedtion222:  "+e.message)
+                }
 
             }else {
                 Prefs.setNEWAppValue(this, Prefs.getAppValue(this))
@@ -184,14 +202,14 @@ class EndlessService : Service() {
             }
 
         }
-
     }
 
     private fun createBroascat() {
+        WorkManager.getInstance(this).cancelAllWork()
         val br = BReciver()
         Log.d("result_1234", "detials:")
         var filter = IntentFilter()
-        filter.addAction("android.intent.action.BOOT_COMPLETED")
+        filter.addAction("android.intent.action.com.digiapt.spyguru")
         registerReceiver(br, filter)
 
         sendBroadcast(Intent(this, BReciver::class.java))
@@ -223,9 +241,5 @@ class EndlessService : Service() {
             Toast.makeText(this, "Not appplicable currently", Toast.LENGTH_SHORT).show()
         }
     }
-
-
-
-
 }
 
