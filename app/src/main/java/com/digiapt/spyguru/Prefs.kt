@@ -49,7 +49,7 @@ class Prefs {
         }
 
 
-            val exceptions = arrayListOf<String>("launcher", "android")
+            val exceptions = arrayListOf<String>("launcher", "android", "home")
 
         fun checkList(checking:String, array: ArrayList<String>): Boolean {
             for (item in array) {

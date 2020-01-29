@@ -179,7 +179,7 @@ class EndlessService : Service() {
     }
 
     private fun startBroadcast() {
-        Log.d("tet55","sd: "+(Prefs.getAppValue(this).equals(Prefs.NULL) || Prefs.getAppValue(this).equals(Prefs.HOME) ||
+        Log.d("tet55","sd: "+(Prefs.getAppValue(this).equals(Prefs.NULL) ||
                 Prefs.getAppValue(this).equals(Prefs.getNEWAppValueLive(this))
                 ))
         if (Prefs.getAppValue(this).equals(Prefs.NULL) || Prefs.getAppValue(this).equals(Prefs.HOME) ||
