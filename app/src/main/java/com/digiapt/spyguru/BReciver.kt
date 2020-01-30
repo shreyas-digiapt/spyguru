@@ -22,7 +22,7 @@ class BReciver :BroadcastReceiver() {
             val wm = WorkManager.getInstance(context)
             val request = OneTimeWorkRequest.Builder(ScheduleTask::class.java)
                 .addTag("MYTASK")
-                .setInitialDelay(1, TimeUnit.MINUTES)
+                .setInitialDelay(10, TimeUnit.SECONDS)
                 .build()
             wm.enqueue(request)
         }

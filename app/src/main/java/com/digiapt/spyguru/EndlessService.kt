@@ -179,16 +179,16 @@ class EndlessService : Service() {
     }
 
     private fun startBroadcast() {
-        Log.d("tet55","sd: "+(Prefs.getAppValue(this).equals(Prefs.NULL) ||
+        Log.d("tet554","sd: "+(Prefs.getAppValue(this).equals(Prefs.NULL) ||
                 Prefs.getAppValue(this).equals(Prefs.getNEWAppValueLive(this))
                 ))
-        if (Prefs.getAppValue(this).equals(Prefs.NULL) || Prefs.getAppValue(this).equals(Prefs.HOME) ||
+        if (Prefs.getAppValue(this).equals(Prefs.NULL) ||
             Prefs.getAppValue(this).equals(Prefs.getNEWAppValueLive(this))
         ) {
 
             Log.d("tet55", "pass: ")
         } else {
-
+            Log.d("tet554", "pass:checasdjjksandnjasnjndjasnn: "+(!Prefs.checkList(Prefs.getAppValue(this), Prefs.exceptions)))
             if (!Prefs.checkList(Prefs.getAppValue(this), Prefs.exceptions)) {
                 try {
                     WorkManager.getInstance(this).cancelAllWorkByTag("MYTASK")
